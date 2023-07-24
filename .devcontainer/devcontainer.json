@@ -35,7 +35,8 @@
 				"rust-lang.rust-analyzer",
 				"tamasfe.even-better-toml",
 				"serayuzgur.crates",
-				"ms-python.python"
+				"ms-python.python",
+				"njpwerner.autodocstring"
 			]
 		}
 	},
