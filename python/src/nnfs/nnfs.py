@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn.datasets import make_moons
 import matplotlib.pyplot as plt
+from typing import List, Any
 
 # test data
 X, y = make_moons(n_samples=300, shuffle=True, 
@@ -17,26 +18,64 @@ print(y)
 # This is just an example of the test data. I didnt use real values.
 
 
+
 class LayerDense:
-        self.scale = 0.01 
-        # Used to scale down the output of the 
-        # Gaussian distriubiotn coming out of np.random.randn
-    def __init__(self, n_inputs, n_neurons):
-        # n_inputs are the number of inputs coming from 
-        # the previous layer
-        # n_neurons is number of neurons you want to create
-        # for this layer 
-        # weights are the starting weights we are creating for the 
-        # each feature per neuron 
-        # in the  make moon example about we have 2 features
-        # so each neuron will have a weight per feature per neuron
-        self.weights = self.scale * np.random.randn(n_inputs, n_neurons)
-        
-        self.biases = np.zeros((1, n_neurons))
+    """
+    Dense (Fully Connected) Layer for a Neural Network.
 
-    def forward(self, inputs):
+    This layer implements a fully connected neural network layer,
+    with weights and biases for each neuron.
+
+    Parameters
+    ----------
+    n_inputs : int
+        Number of input features (or neurons from the previous layer).
+
+    n_neurons : int
+        Number of neurons for this layer.
+
+    Attributes
+    ----------
+    weights : ndarray of shape (n_inputs, n_neurons)
+        The weights matrix of the layer. Initialized with values
+        drawn from a Gaussian distribution, scaled by a factor.
+
+    biases : ndarray of shape (1, n_neurons)
+        The biases vector for each neuron. Initialized with zeros.
+
+    output : ndarray
+        The output of the layer after applying the forward pass.
+        Shape varies based on the input shape and number of neurons.
+
+    Notes
+    -----
+    The forward operation is essentially computing the dot product 
+    of inputs and weights, and then adding biases. Conceptually,
+    weights help in scaling and biases assist in shifting the 
+    values (akin to the `mx+b` linear formula).
+    """
+
+    def __init__(self, n_inputs: int, n_neurons: int):
+        self.scale: float = 0.01 
+        self.weights: np.ndarray = self.scale * np.random.randn(n_inputs, n_neurons)
+        self.biases: np.ndarray = np.zeros((1, n_neurons))
+        self.output: np.ndarray = np.empty(0)
+
+    def forward(self, inputs: np.ndarray) -> None:
+        """
+        Compute the forward pass of the dense layer.
+
+        Parameters
+        ----------
+        inputs : ndarray
+            Input data or features. Shape varies based on data and 
+            previous layers.
+
+        Returns
+        -------
+        None
+        """
         self.output = np.dot(inputs, self.weights) + self.biases
-
 
 class Activation_ReLU:
     def forward(self, inputs):
