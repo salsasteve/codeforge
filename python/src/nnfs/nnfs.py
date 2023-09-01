@@ -2,21 +2,20 @@ import numpy as np
 from sklearn.datasets import make_moons
 import matplotlib.pyplot as plt
 from typing import List, Any
+from activation_functions import sigmoid, relu, tanh, softmax
 
 # test data
-X, y = make_moons(n_samples=300, shuffle=True, 
-                  noise=0.15, random_state=42)
+X, y = make_moons(n_samples=300, shuffle=True, noise=0.15, random_state=42)
 
 print(y)
-#plt.scatter(X[:, 0], X[:, 1], c=y)
-#plt.show()
+# plt.scatter(X[:, 0], X[:, 1], c=y)
+# plt.show()
 
 # In this scenario X=[[a1, b1],[a2, b2]] is the feature vector with 2 features and y=[0,1] is the label
 # a is feature 1
 # b is feature 2
 # a1,b1 are the feature for the first sample with a class 0  X[0] = [a1,b1] y[0] = 0
 # This is just an example of the test data. I didnt use real values.
-
 
 
 class LayerDense:
@@ -34,6 +33,8 @@ class LayerDense:
     n_neurons : int
         Number of neurons for this layer.
 
+    activation :
+
     Attributes
     ----------
     weights : ndarray of shape (n_inputs, n_neurons)
@@ -49,42 +50,62 @@ class LayerDense:
 
     Notes
     -----
-    The forward operation is essentially computing the dot product 
+    The forward operation is essentially computing the dot product
     of inputs and weights, and then adding biases. Conceptually,
-    weights help in scaling and biases assist in shifting the 
+    weights help in scaling and biases assist in shifting the
     values (akin to the `mx+b` linear formula).
     """
 
-    def __init__(self, n_inputs: int, n_neurons: int):
-        self.scale: float = 0.01 
+    def __init__(self, n_inputs: int, n_neurons: int, activation: str = None):
+        self.scale: float = 0.01
         self.weights: np.ndarray = self.scale * np.random.randn(n_inputs, n_neurons)
         self.biases: np.ndarray = np.zeros((1, n_neurons))
         self.output: np.ndarray = np.empty(0)
+        self.activation = activation
 
     def forward(self, inputs: np.ndarray) -> None:
         """
-        Compute the forward pass of the dense layer.
+        Compute the forward pass through the dense layer with optional activation.
 
         Parameters
         ----------
-        inputs : ndarray
-            Input data or features. Shape varies based on data and 
-            previous layers.
+        inputs : array-like of shape (n_samples, n_features)
+            The input data to propagate through the layer.
 
         Returns
         -------
         None
+            The result is stored in the `output` attribute of the class.
+
+        Attributes set
+        --------------
+        output : np.ndarray
+            The output of the forward pass, after applying weights, biases, and activation.
+
+        Notes
+        -----
+        The type of activation applied is determined by the `activation` attribute of the class.
+        Supported activations are 'sigmoid', 'relu', and 'tanh'. If none or an unrecognized
+        activation is specified, the output is the raw result (linear activation).
+
+        Examples
+        --------
+        >>> layer = LayerDense(3, 2, activation='relu')
+        >>> data = np.array([[0.1, 0.2, 0.3]])
+        >>> layer.forward(data)
+        >>> print(layer.output)
+        array([[...]])
         """
-        self.output = np.dot(inputs, self.weights) + self.biases
+        raw_output = np.dot(inputs, self.weights) + self.biases
 
-class Activation_ReLU:
-    def forward(self, inputs):
-        self.output = np.maximum(0, inputs)
-
-
-class Activation_Softmax:
-    def forward(self, inputs):
-        exp_values = np.exp(inputs - np.max(inputs, axis=1, keepdims=True))
-        probabilities = exp_values / np.sum(exp_values, axis=1, keepdims=True)
-        self.output = probabilities
-
+        # Apply the activation function, if specified
+        if self.activation == "sigmoid":
+            self.output = sigmoid(raw_output)
+        elif self.activation == "relu":
+            self.output = relu(raw_output)
+        elif self.activation == "tanh":
+            self.output = tanh(raw_output)
+        elif self.activation == "softmax":
+            self.output = softmax(raw_output)
+        else:  # If no activation or unrecognized activation is provided, use linear activation
+            self.output = raw_output
