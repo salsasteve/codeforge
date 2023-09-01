@@ -1,5 +1,5 @@
 import numpy as np
-from nnfs import LayerDense
+from LayerDense import LayerDense
 from activation_functions import sigmoid, relu, tanh, softmax
 
 

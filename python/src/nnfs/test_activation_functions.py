@@ -1,5 +1,4 @@
 import numpy as np
-
 from activation_functions import sigmoid, relu, tanh, softmax
 
 
