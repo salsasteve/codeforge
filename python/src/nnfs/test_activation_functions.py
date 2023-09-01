@@ -1,6 +1,6 @@
 import numpy as np
 
-from activation_functions import sigmoid, relu, tanh
+from activation_functions import sigmoid, relu, tanh, softmax
 
 
 def test_sigmoid():
@@ -42,3 +42,14 @@ def test_tanh():
     random_values = np.random.randn(1000)
     outputs = tanh(random_values)
     assert all(-1 <= val <= 1 for val in outputs), "Values out of bounds in tanh"
+
+def test_softmax():
+    # Known values
+    input_array = np.array([[2.0, 1.0, 0.1]])
+    expected_output = np.array([[0.65900114, 0.24243297, 0.09856589]])
+    np.testing.assert_almost_equal(softmax(input_array), expected_output, decimal=8)
+    
+    # Test that sums are close to 1 for random input
+    random_input = np.random.randn(10, 5)
+    sums = softmax(random_input).sum(axis=1)
+    assert all(np.isclose(s, 1) for s in sums), "Not all rows sum to 1 in softmax"
