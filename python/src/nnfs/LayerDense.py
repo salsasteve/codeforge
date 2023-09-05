@@ -1,7 +1,4 @@
 import numpy as np
-from sklearn.datasets import make_moons
-import matplotlib.pyplot as plt
-from typing import List, Any
 from activation_functions import sigmoid, relu, tanh, softmax
 
 
@@ -43,7 +40,7 @@ class LayerDense:
     values (akin to the `mx+b` linear formula).
     """
 
-    def __init__(self, n_inputs: int, n_neurons: int, activation: str = None):
+    def __init__(self, n_inputs: int, n_neurons: int, activation: str = ""):
         self.scale: float = 0.01
         self.weights: np.ndarray = self.scale * np.random.randn(n_inputs, n_neurons)
         self.biases: np.ndarray = np.zeros((1, n_neurons))
