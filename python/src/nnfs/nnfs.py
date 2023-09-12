@@ -29,13 +29,15 @@ def create_vertical_data(samples, classes):
 # test data
 X, y = create_spiral_data(100, 3)
 #X, y = create_data(100, 3)
-#print(y)
+print(X.shape)
+print(y.shape)
 # plt.scatter(X[:, 0], X[:, 1], c=y)
 # plt.show()
 
 
 
 dense1 = LayerDense(2, 3, "relu")
+print(dense1.weights)
 
 # Create second Dense layer with 3 input features (as we take output
 # of previous layer here) and 3 output values
@@ -52,7 +54,7 @@ best_dense2_weights = dense2.weights.copy()
 best_dense2_biases = dense2.biases.copy()
 
 
-for iteration in range(100000):
+for iteration in range(2):
     
     dense1.weights += 0.05 * np.random.randn(2, 3)
     dense1.biases += 0.05 * np.random.randn(1, 3)
