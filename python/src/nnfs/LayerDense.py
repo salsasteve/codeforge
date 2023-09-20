@@ -80,7 +80,8 @@ class LayerDense:
         >>> print(layer.output)
         array([[...]])
         """
-        raw_output = np.dot(inputs, self.weights) + self.biases
+        self.inputs = inputs
+        raw_output = self.cell_body(inputs)
 
         # Apply the activation function, if specified
         if self.activation == "sigmoid":
@@ -93,3 +94,33 @@ class LayerDense:
             self.output = softmax(raw_output)
         else:  # If no activation or unrecognized activation is provided, use linear activation
             self.output = raw_output
+    
+    
+    def compute(self, inputs: np.ndarray) -> np.ndarray:
+        """
+        Compute the output of a neuron based on its inputs and weights.
+    
+        Parameters
+        ----------
+        inputs : np.ndarray, shape (n_features,)
+            The input values to the neuron.
+        
+        Returns
+        -------
+        output : np.ndarray
+            The computed output of the neuron.
+        
+        Notes
+        -----
+        The output is computed as a dot product of the input and weights, with biases added.
+        """
+
+        return np.dot(inputs, self.weights) + self.biases
+    
+
+    def cell_body_dervative(self, dvalues):
+        # Gradients on parameters
+        self.dweights = np.dot(self.inputs.T, dvalues)
+        self.dbiases = np.sum(dvalues, axis=0, keepdims=True)
+        # Gradient on values
+        self.dinputs = np.dot(dvalues, self.weights.T)    
