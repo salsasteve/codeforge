@@ -8,7 +8,6 @@ class Solution(object):
         """
 
         word = re.sub(r'[^0-9a-zA-Z]+', '', s).lower()
-        print(word)
         return word == word[::-1]
 
         
