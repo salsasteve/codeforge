@@ -7,7 +7,8 @@ class Solution(object):
         :rtype: bool
         """
 
-        word = ''.join(char for char in s if char.isalnum()).lower()
+        word = re.sub(r'[^0-9a-zA-Z]+', '', s).lower()
+        print(word)
         return word == word[::-1]
 
         
