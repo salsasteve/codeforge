@@ -5,29 +5,28 @@ class Solution(object):
         :rtype: bool
         """
 
-        def is_valid_sequence(sequence):
-            # Filter out the empty cells '.'
-            nums = [num for num in sequence if num != '.']
-            return len(nums) == len(set(nums))
+        # One list to hold all the sets. Each set ensures no repetition.
+        # 0-8: rows, 9-17: columns, 18-26: boxes
+        sets = [set() for _ in range(27)]
 
-        # Check each row
-        for row in board:
-            if not is_valid_sequence(row):
-                return False
-
-        # Check each column
-        for col in range(9):
-            if not is_valid_sequence([board[row][col] for row in range(9)]):
-                return False
-
-        # Check each 3x3 box
-        for i in range(0, 9, 3):
-            for j in range(0, 9, 3):
-                box = [board[x][y] for x in range(i, i+3) for y in range(j, j+3)]
-                if not is_valid_sequence(box):
+        for i in range(9):
+            for j in range(9):
+                num = board[i][j]
+                if num == '.':
+                    continue
+                
+                # Indexes for the row, column, and box sets
+                row_idx, col_idx, box_idx = i, 9 + j, 18 + (i // 3) * 3 + j // 3
+                
+                if num in sets[row_idx] or num in sets[col_idx] or num in sets[box_idx]:
                     return False
-
+                
+                sets[row_idx].add(num)
+                sets[col_idx].add(num)
+                sets[box_idx].add(num)
+                
         return True
+                        
 
 
         
