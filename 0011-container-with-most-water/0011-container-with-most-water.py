@@ -4,25 +4,33 @@ class Solution(object):
         :type height: List[int]
         :rtype: int
         """
+        
+        l = 0 # height of the left stick
+        r = len(height) - 1 # height of the right stick
 
-        lp = 0
-        rp = len(height) - 1
-        maxi = 0
+        # max(height) * length(r-l)
+        max_area = 0
 
-        while lp < rp:
-            width  = rp - lp 
-            h = min(height[lp], height[rp])
-            
-            calc = width*h
+        while l < r:
+            length = r - l
+            cur_min_height = min(height[l], height[r])
 
-            maxi = max(maxi, calc)
+            area = length * cur_min_height
 
-            if height[lp] > height[rp]:
-                rp -= 1
+            max_area = max(max_area, area)
+
+            if height[l] < height[r]:
+                l += 1
             else:
-                lp += 1
-                
-        return maxi
+                r -= 1
+        return max_area
+            
+
+        
+
+        
+            
+
 
 
 
