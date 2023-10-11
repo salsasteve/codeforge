@@ -4,26 +4,27 @@ class Solution(object):
         :type s: str
         :rtype: bool
         """
+        # Dictionary to map open to close parentheses
+        parentheses_map = {
+            "{": "}", 
+            "(": ")", 
+            "[": "]"
+        }
 
-        pare = {
-                "{":"}", 
-                "(":")", 
-                "[":"]",
-                }
-        
+        # Stack to help with the validation
         stack = []
 
-        # lifo
-
-        for i in s:
-
-            if stack and stack[-1] in ["}","]",")"]: 
-                return False
-            elif stack and pare[stack[-1]] == i:
+        # Iterate through each character in the string
+        for char in s:
+            # If the character is an opening parenthesis
+            if char in parentheses_map:
+                stack.append(char)
+            # If stack isn't empty and the character matches the closing parenthesis for the last opening one in the stack
+            elif stack and char == parentheses_map[stack[-1]]:
                 stack.pop()
+            # If the current character doesn't match the top of the stack or the stack is empty
             else:
-                stack.append(i)
+                return False
 
-        return len(stack) == 0
-        
-        
+        # If the stack is empty, then all the parentheses were matched
+        return not stack
