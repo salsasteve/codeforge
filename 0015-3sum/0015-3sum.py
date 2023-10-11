@@ -5,35 +5,40 @@ class Solution(object):
         :rtype: List[List[int]]
         """
         
-        ans = []
+        # Final list to store the resulting triplets
+        triplets = []
+        
+        # Sort the input list
         nums.sort()
         
-        for i, a in enumerate(nums):
-            if i > 0 and a == nums[i - 1]:
-                # same value as before
-                # and pointer1 is greater than 0
+        # Iterate through the list
+        for idx, num in enumerate(nums):
+            # Skip duplicates
+            if idx > 0 and num == nums[idx - 1]:
                 continue
             
-            l, r = i + 1, len(nums) - 1
-            while l < r:
-                # p1 + l + r = 0
-                threeSum = a + nums[l] + nums[r]
-                if threeSum > 0: # [-2,0,3,4,3]
-                    # sum i too big  a l     r
-                    # reduce it by decrementing the right pointer
-                    r -= 1
-                elif threeSum < 0 :# [-2,0,3,4,1]
-                    # sum i too small  a l     r
-                    # increment it by increase the left pointer
-                    l += 1
+            # Two pointers initialized
+            left, right = idx + 1, len(nums) - 1
+            
+            # Continue as long as left pointer is to the left of right pointer
+            while left < right:
+                current_sum = num + nums[left] + nums[right]
+                
+                # If the sum of the three numbers is greater than 0,
+                # we need to decrease the sum, so we move the right pointer to the left
+                if current_sum > 0:
+                    right -= 1
+                # If the sum of the three numbers is less than 0,
+                # we need to increase the sum, so we move the left pointer to the right
+                elif current_sum < 0:
+                    left += 1
+                # If the sum is zero, it's a valid triplet
                 else:
-                    ans.append([a, nums[l], nums[r]])
-                    # [-2 , 2, 0, 0, 2, 2]
-                    l += 1
-                    while nums[l] == nums[l-1] and l < r:
-                        l += 1
+                    triplets.append([num, nums[left], nums[right]])
+                    left += 1
+                    
+                    # Skip duplicates on the left pointer side
+                    while left < right and nums[left] == nums[left-1]:
+                        left += 1
 
-        return ans
-
-        
-        
+        return triplets
